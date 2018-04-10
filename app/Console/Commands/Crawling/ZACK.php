@@ -44,7 +44,6 @@ class ZACK extends Command
         $data = Crawling::getPage($url);
         $data = json_decode($data,true);
 
-        $now = Carbon::now();
         foreach ($data['daily_pe_ratio'] as $k => $v){
             if ($v == 'N/A') {
                 continue;
@@ -52,7 +51,7 @@ class ZACK extends Command
             $arr_time = explode('/',$k);
             $time = '20' . $arr_time[2] . '-' . $arr_time[0] . '-' . $arr_time[1];
             $date_time = Carbon::parse($time)->timestamp;
-            $type = 2;
+            $type = Data::DATA_TYPE_BP_500;
 
             $dataObj = Data::where('date_time',$date_time)->where('type',$type)->first();
             if (!is_null($dataObj)) {
@@ -63,10 +62,8 @@ class ZACK extends Command
                 'date_time' => $date_time,
                 'pe'   => $v,
                 'type' => $type,
-                'created_at' => $now,
-                'updated_at' => $now
             ];
-            DB::table('datas')->insert($arr);
+            Data::create($arr);
         }
 
 

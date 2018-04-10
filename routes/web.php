@@ -12,8 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('data');
 });
 
 
-\Illuminate\Support\Facades\Route::get('zack','DataController@zack');
+Route::get('zack/{type?}','DataController@zack')->name('data');
